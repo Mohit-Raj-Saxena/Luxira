@@ -1,0 +1,245 @@
+<%- include('./partials/header') %>
+
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Cart Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Shopping Cart</h1>
+      <p class="text-gray-600 mt-2">Review your items before checkout</p>
+    </div>
+
+    <% user.cart.forEach(function(item){ %>
+      <div class="bg-white rounded-xl shadow-lg mb-8 overflow-hidden">
+        <div class="flex flex-col lg:flex-row">
+          <!-- Product Image Section -->
+          <div class="w-full lg:w-2/5 xl:w-1/3">
+            <div class="relative">
+              <!-- Product Image Container -->
+              <div class="flex justify-center items-center h-80 bg-[<%= item.bgcolor %>] p-8">
+                <img class="h-64 w-auto object-contain drop-shadow-lg" 
+                     src="data:image/jpeg;base64, <%= item.image.toString('base64') %>" 
+                     alt="<%= item.name %>">
+              </div>
+              
+              <!-- Product Info Panel -->
+              <div class="bg-[<%= item.panelcolor %>] px-6 py-5">
+                <div class="flex items-center justify-between">
+                  <h3 class="text-2xl font-semibold text-gray-800 truncate pr-4"><%= item.name %></h3>
+                  
+                  <!-- Quantity Controls -->
+                  <div class="flex items-center gap-3 bg-white/10 backdrop-blur-sm rounded-full px-3 py-2">
+                    <button onclick="changeQuantity('<%= item._id %>', -1)" class="w-8 h-8 bg-white hover:bg-gray-100 transition-colors duration-200 flex rounded-full items-center justify-center ri-subtract-line text-gray-700 hover:text-gray-900 cursor-pointer"></button>
+                    <div id="quantity-<%= item._id %>" class="px-3 py-1 rounded-md bg-white text-black font-medium min-w-[3rem] text-center">01</div>
+                    <button onclick="changeQuantity('<%= item._id %>', 1)" class="w-8 h-8 bg-white hover:bg-gray-100 transition-colors duration-200 flex rounded-full items-center justify-center ri-add-line text-gray-700 hover:text-gray-900 cursor-pointer"></button>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Net Total Bar -->
+              <div class="flex text-white items-center justify-between px-6 py-4 bg-[<%= item.textcolor %>]">
+                <h4 class="text-lg font-medium">Net Total</h4>
+                <h2 id="net-total-<%= item._id %>" class="text-xl font-bold">₹ <%= item.price+20-item.discount %></h2>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Price Breakdown Section -->
+          <div class="w-full lg:w-3/5 xl:w-2/3 p-8 lg:p-10">
+            <div class="h-full flex flex-col">
+              <h3 class="text-2xl font-bold text-gray-900 mb-8 pb-3 border-b-2 border-gray-100">
+                Price Breakdown
+              </h3>
+              
+              <div class="flex-1">
+                <div class="space-y-5 mb-8">
+                  <div class="flex justify-between items-center py-2">
+                    <h4 class="text-lg text-gray-600 font-medium">Total MRP</h4>
+                    <h4 id="total-mrp-<%= item._id %>" class="text-lg text-gray-900 font-semibold">₹ <%= item.price %></h4>
+                  </div>
+                  
+                  <div class="flex justify-between items-center py-2">
+                    <h4 class="text-lg text-gray-600 font-medium">Discount on MRP</h4>
+                    <h4 id="discount-<%= item._id %>" class="text-lg text-green-600 font-semibold">- ₹ <%= Number(item.discount) %></h4>
+                  </div>
+                  
+                  <div class="flex justify-between items-center py-2">
+                    <h4 class="text-lg text-gray-600 font-medium">Platform Fee</h4>
+                    <h4 class="text-lg text-gray-900 font-semibold">₹ 20</h4>
+                  </div>
+                  
+                  <div class="flex justify-between items-center py-2">
+                    <h4 class="text-lg text-gray-600 font-medium">Shipping Fee</h4>
+                    <h4 class="text-lg text-green-600 font-semibold">FREE</h4>
+                  </div>
+                </div>
+                
+                <!-- Divider -->
+                <div class="w-full h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent my-6"></div>
+                
+                <!-- Total Amount -->
+                <div class="flex justify-between items-center py-4 bg-green-50 rounded-lg px-6 mb-6">
+                  <h3 class="text-xl font-bold text-gray-900">Total Amount</h3>
+                  <h3 id="total-amount-<%= item._id %>" class="text-2xl font-bold text-green-600">₹ <%= item.price+20-item.discount %></h3>
+                </div>
+              </div>
+              
+              <form action="" class="mt-auto">
+                <!-- Form content can be added here if needed -->
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+    
+    <!-- Order Summary Section -->
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden">
+      <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
+        <h2 class="text-2xl font-bold text-white">Order Summary</h2>
+      </div>
+      
+      <div class="p-8">
+        <!-- Items List -->
+        <div class="mb-8">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6 pb-2 border-b border-gray-200">Items in Cart</h3>
+          <div class="space-y-4">
+            <% user.cart.forEach(function(item){ %>
+              <div class="flex justify-between items-center py-3 px-4 bg-gray-50 rounded-lg">
+                <div class="flex-1">
+                  <h4 class="font-medium text-gray-900"><%= item.name %></h4>
+                  <p class="text-sm text-gray-600">₹ <%= item.price %> × <span id="summary-qty-<%= item._id %>">1</span></p>
+                </div>
+                <div class="text-right">
+                  <p class="font-semibold text-gray-900" id="summary-total-<%= item._id %>">₹ <%= item.price %></p>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        
+        <!-- Grand Total Breakdown -->
+        <div class="border-t border-gray-200 pt-6">
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-lg text-gray-600">Subtotal (MRP)</span>
+              <span class="text-lg font-semibold text-gray-900" id="grand-subtotal">₹ <%= user.cart.reduce((total, item) => total + item.price, 0) %></span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+              <span class="text-lg text-gray-600">Total Discount</span>
+              <span class="text-lg font-semibold text-green-600" id="grand-discount">- ₹ <%= user.cart.reduce((total, item) => total + Number(item.discount), 0) %></span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+              <span class="text-lg text-gray-600">Platform Fee</span>
+              <span class="text-lg font-semibold text-gray-900">₹ <%= user.cart.length * 20 %></span>
+            </div>
+            
+            <div class="flex justify-between items-center">
+              <span class="text-lg text-gray-600">Shipping Fee</span>
+              <span class="text-lg font-semibold text-green-600">FREE</span>
+            </div>
+            
+            <div class="border-t border-gray-300 pt-4">
+              <div class="flex justify-between items-center">
+                <span class="text-2xl font-bold text-gray-900">Grand Total</span>
+                <span class="text-3xl font-bold text-green-600" id="grand-total">₹ <%= user.cart.reduce((total, item) => total + item.price + 20 - Number(item.discount), 0) %></span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Checkout Button -->
+          <div class="mt-8">
+            <button class="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] shadow-lg">
+              Proceed to Checkout
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%- include('./partials/footer') %>
+
+<!-- Item data for JavaScript -->
+<script type="application/json" id="cart-data">
+<%- JSON.stringify(user.cart.map(item => ({
+  _id: item._id,
+  price: item.price,
+  discount: Number(item.discount)
+}))) %>
+</script>
+
+<script>
+// Store original item data for calculations
+const cartData = JSON.parse(document.getElementById('cart-data').textContent);
+const itemData = {};
+
+// Initialize itemData from cartData
+cartData.forEach(item => {
+  itemData[item._id] = {
+    price: item.price,
+    discount: item.discount,
+    quantity: 1
+  };
+});
+
+function changeQuantity(itemId, change) {
+  const currentQuantity = itemData[itemId].quantity;
+  const newQuantity = Math.max(1, currentQuantity + change); // Minimum quantity is 1
+  
+  if (newQuantity !== currentQuantity) {
+    itemData[itemId].quantity = newQuantity;
+    updateDisplay(itemId);
+  }
+}
+
+function updateDisplay(itemId) {
+  const item = itemData[itemId];
+  const quantity = item.quantity;
+  
+  // Update quantity display
+  document.getElementById(`quantity-${itemId}`).textContent = quantity.toString().padStart(2, '0');
+  
+  // Calculate new prices
+  const totalMRP = item.price * quantity;
+  const totalDiscount = item.discount * quantity;
+  const platformFee = 20; // Fixed platform fee
+  const netTotal = totalMRP + platformFee - totalDiscount;
+  
+  // Update price displays
+  document.getElementById(`total-mrp-${itemId}`).textContent = `₹ ${totalMRP}`;
+  document.getElementById(`discount-${itemId}`).textContent = `- ₹ ${totalDiscount}`;
+  document.getElementById(`net-total-${itemId}`).textContent = `₹ ${netTotal}`;
+  document.getElementById(`total-amount-${itemId}`).textContent = `₹ ${netTotal}`;
+  
+  // Update summary section
+  document.getElementById(`summary-qty-${itemId}`).textContent = quantity;
+  document.getElementById(`summary-total-${itemId}`).textContent = `₹ ${totalMRP}`;
+  
+  // Update grand totals
+  updateGrandTotals();
+}
+
+function updateGrandTotals() {
+  let grandSubtotal = 0;
+  let grandDiscount = 0;
+  let platformFees = 0;
+  
+  // Calculate totals for all items
+  Object.keys(itemData).forEach(itemId => {
+    const item = itemData[itemId];
+    grandSubtotal += item.price * item.quantity;
+    grandDiscount += item.discount * item.quantity;
+    platformFees += 20; // ₹20 per item
+  });
+  
+  const grandTotal = grandSubtotal + platformFees - grandDiscount;
+  
+  // Update grand total displays
+  document.getElementById('grand-subtotal').textContent = `₹ ${grandSubtotal}`;
+  document.getElementById('grand-discount').textContent = `- ₹ ${grandDiscount}`;
+  document.getElementById('grand-total').textContent = `₹ ${grandTotal}`;
+}
+</script>

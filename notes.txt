@@ -1,0 +1,142 @@
+
+_id
+68d73148305f376b8413c772
+image
+Binary.createFromBase64('iVBORw0KGgoAAAANSUhEUgAAAMIAAAEKCAYAAABALYpcAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1B…', 0)
+name
+"Backpack"
+price
+1100
+discount
+0
+bgcolor
+"#F3F8FB"
+panelcolor
+"#D3E4EE"
+textcolor
+"#48606E"
+__v
+0
+
+
+
+
+_id
+68d731ee305f376b8413c774
+image
+Binary.createFromBase64('iVBORw0KGgoAAAANSUhEUgAAAMEAAAEPCAYAAAD716DsAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1B…', 0)
+name
+"Multipurpose"
+price
+100
+discount
+0
+bgcolor
+"#DED0BF"
+panelcolor
+"#C5B095"
+textcolor
+"#5F4A30"
+__v
+0
+
+
+
+_id
+68d732d1305f376b8413c776
+image
+Binary.createFromBase64('iVBORw0KGgoAAAANSUhEUgAAANIAAADxCAYAAAC+oenaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1B…', 0)
+name
+"Pink Attack"
+price
+1400
+discount
+25
+bgcolor
+"#F4E0E1"
+panelcolor
+"#E3C4C6"
+textcolor
+"#816264"
+__v
+0
+
+
+
+_id
+68d736ca305f376b8413c77e
+image
+Binary.createFromBase64('iVBORw0KGgoAAAANSUhEUgAAAJ8AAADbCAYAAABz0kOaAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1B…', 0)
+name
+"The Daily"
+price
+100
+discount
+0
+bgcolor
+"#FBFBFB"
+panelcolor
+"#EBEBEB"
+textcolor
+"#717171"
+__v
+0
+
+
+
+cart.ejs
+<%- include('./partials/header') %>
+    <% user.cart.forEach(function(item){ %>
+        <div class="w-full h-screen flex items-start px-20 py-20 gap-10">
+            <div class="w-[30%] rounded-md overflow-hidden">
+                <div class="w-full flex justify-center items-center h-80 bg-[<%= item.bgcolor %>]">
+                    <img class="h-[18rem]" src="data:image/jpeg;base64, <%= item.image.toString('base64') %>"
+                        alt="">
+                </div>
+                <div class="w-full flex justify-between px-5 py-4 bg-[<%= item.panelcolor %>]">
+                    <h3 class="text-2xl">Clinge Bag</h3>
+                    <div class="flex items-center gap-2">
+                        <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-add-line"></i>
+                        <div class="px-2 py-1 rounded-md bg-white text-black">01</div>
+                        <i class="w-7 h-7 bg-white flex rounded-full items-center justify-center ri-subtract-line"></i>
+                    </div>
+                </div>
+                <div class="flex text-white items-center justify-between px-5 py-3 bg-[<%= item.textcolor %>]">
+                    <h4 class="text-lg">Net Total</h4>
+                    <h2 class="text-lg">₹ <%= bill %>
+                    </h2>
+                </div>
+            </div>
+            <div class="w-[70%]">
+                <h3 class="text-xl">Price Breakdown</h3>
+                <div class="px-10 mt-5">
+                    <div class="flex mt-2">
+                        <h4 class="w-1/3">Total MRP</h4>
+                        <h4>₹ <%= item.price %>
+                        </h4>
+                    </div>
+                    <div class="flex mt-2">
+                        <h4 class="w-1/3">Discount on MRP</h4>
+                        <h4>₹ <%= Number(item.discount) %>
+                        </h4>
+                    </div>
+                    <div class="flex mt-2">
+                        <h4 class="w-1/3">Platform Fee</h4>
+                        <h4>₹ 20</h4>
+                    </div>
+                    <div class="flex mt-2">
+                        <h4 class="w-1/3">Shipping Fee</h4>
+                        <h4>FREE</h4>
+                    </div>
+                </div>
+                <div class="w-full h-[1px] bg-black mt-10"></div>
+                <div class="flex mt-5">
+                    <h3 class="w-1/3 text-xl">Total Amount</h3>
+                    <h3 class="font-semibold text-xl text-green-600">₹ <%= bill %>
+                    </h3>
+                </div>
+                <form action=""></form>
+            </div>
+        </div>
+        <% }) %>
+            <%- include('./partials/footer') %>
