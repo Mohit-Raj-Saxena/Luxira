@@ -8,6 +8,7 @@ const productsRouter = require('./routes/productsRouter');
 const indexRouter = require('./routes/index');
 const expressSession = require("express-session");
 const flash = require("connect-flash");
+const MongoStore = require('connect-mongo');
 
 require("dotenv").config();
 
@@ -20,9 +21,12 @@ app.use(cookieParser());
 
 app.use(
     expressSession({
+        store: new MongoStore({
+            mongoUrl: process.env.MONGODB_URI || "mongodb://localhost:27017/luxira"
+        }),
         resave: false,
         saveUninitialized: false,
-        secret: process.env.EXPRESS_SESSION_SECRET,
+        secret: process.env.EXPRESS_SESSION_SECRET || "secret",
     })
 );
 app.use(flash());
@@ -36,4 +40,6 @@ app.use("/users",usersRouter);
 app.use("/products",productsRouter);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT);
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
