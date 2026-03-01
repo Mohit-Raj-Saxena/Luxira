@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const config = require('config');
 const ownersRouter = require('./routes/ownersRouter');
 const usersRouter = require('./routes/usersRouter');
 const productsRouter = require('./routes/productsRouter');
@@ -22,7 +23,7 @@ app.use(cookieParser());
 app.use(
     expressSession({
         store: new MongoStore({
-            mongoUrl: process.env.MONGODB_URI || "mongodb://localhost:27017/luxira"
+            mongoUrl: config.get("MONGODB_URI")
         }),
         resave: false,
         saveUninitialized: false,
